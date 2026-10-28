@@ -6,10 +6,11 @@ enhancement:
   method: "clahe" # 'zerodce' or 'clahe'
 
 super_resolution:
-  enabled: true
-  model_path: "models/weights/EDSR_x4.pb" # Downloaded by script
+  enabled: false
+  method: "fast" # 'fast' (~10ms) or 'edsr' (deep DNN, CPU intensive)
+  model_path: "models/weights/EDSR_x4.pb"
   model_name: "edsr"
-  scale: 4
+  scale: 2
 
 detection:
   enabled: true

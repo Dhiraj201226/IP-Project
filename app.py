@@ -56,15 +56,47 @@ st.sidebar.header("⚡ Resolution Standardization")
 st.sidebar.info("📐 All images are automatically resized to **600×600 px** before processing to save computation and prevent screen blowup.")
 st.sidebar.markdown("---")
 
+@st.cache_resource
+def get_surveillance_pipelines():
+    return ImagePipeline(), VideoPipeline()
+
+@st.cache_resource
+def get_similarity_pipeline(model_name):
+    return SimilarityPipeline(model_name=model_name)
+
 if app_mode == "Surveillance Pipeline":
-    pipeline = ImagePipeline()
-    video_pipeline = VideoPipeline()
+    pipeline, video_pipeline = get_surveillance_pipelines()
 
     st.sidebar.header("Pipeline Options")
-    pipeline.config['enhancement']['enabled'] = st.sidebar.checkbox("Low-Light Enhancement", value=True)
-    pipeline.config['super_resolution']['enabled'] = st.sidebar.checkbox("Super Resolution", value=True)
-    pipeline.config['detection']['enabled'] = st.sidebar.checkbox("Person Detection", value=True)
-    pipeline.config['crowd_counting']['enabled'] = st.sidebar.checkbox("Crowd Analysis", value=True)
+    enable_enh = st.sidebar.checkbox("Low-Light Enhancement", value=True)
+    enable_sr = st.sidebar.checkbox(
+        "Super Resolution",
+        value=False,
+        help="Disabled by default. When enabled, uses fast 10ms edge-preserving sharpening."
+    )
+    sr_method = "fast"
+    if enable_sr:
+        sr_choice = st.sidebar.selectbox(
+            "Super Resolution Engine",
+            ["Fast Edge-Preserving Sharpening (~0.02s)", "Deep EDSR Neural Network (Slow, ~4 mins on CPU)"],
+            index=0
+        )
+        sr_method = "edsr" if "EDSR" in sr_choice else "fast"
+
+    enable_det = st.sidebar.checkbox("Person Detection", value=True)
+    enable_crowd = st.sidebar.checkbox("Crowd Analysis", value=True)
+
+    pipeline.config['enhancement']['enabled'] = enable_enh
+    pipeline.config['super_resolution']['enabled'] = enable_sr
+    pipeline.config['super_resolution']['method'] = sr_method
+    pipeline.config['detection']['enabled'] = enable_det
+    pipeline.config['crowd_counting']['enabled'] = enable_crowd
+
+    video_pipeline.config['enhancement']['enabled'] = enable_enh
+    video_pipeline.config['super_resolution']['enabled'] = enable_sr
+    video_pipeline.config['super_resolution']['method'] = sr_method
+    video_pipeline.config['tracking']['enabled'] = enable_det
+    video_pipeline.config['crowd_counting']['enabled'] = enable_crowd
 
     input_type = st.radio("Select Input Type", ["Image", "Video"])
 
@@ -242,7 +274,7 @@ elif app_mode == "Person & Face Similarity Ranking":
 
         if st.button("🚀 Find & Rank Matching Persons", type="primary"):
             with st.spinner(f"Cleaning images and matching {entity_mode} regions in {scene_name}..."):
-                sim_pipeline = SimilarityPipeline(model_name=selected_model)
+                sim_pipeline = get_similarity_pipeline(selected_model)
                 results = sim_pipeline.run(
                     query_img,
                     scene_img,
