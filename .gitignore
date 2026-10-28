@@ -21,3 +21,7 @@ data/test/videos/output_video*
 Thumbs.db
 .vscode/
 .idea/
+
+# Unrelated frontend clones
+new/
+Inheritance/
