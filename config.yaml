@@ -33,4 +33,4 @@ evaluation:
 
 runtime:
   device: "auto"
-  confidence_threshold: 0.50
+  confidence_threshold: 0.20

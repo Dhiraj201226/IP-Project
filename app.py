@@ -86,17 +86,30 @@ if app_mode == "Surveillance Pipeline":
     enable_det = st.sidebar.checkbox("Person Detection", value=True)
     enable_crowd = st.sidebar.checkbox("Crowd Analysis", value=True)
 
+    st.sidebar.markdown("---")
+    st.sidebar.header("🎯 Detection Sensitivity")
+    conf_thresh = st.sidebar.slider(
+        "Person Confidence Threshold",
+        min_value=0.10,
+        max_value=0.70,
+        value=0.20,
+        step=0.05,
+        help="Lower threshold (0.15–0.25) detects crowded, occluded, and dark background people. Default is 0.20 for nighttime crowds."
+    )
+
     pipeline.config['enhancement']['enabled'] = enable_enh
     pipeline.config['super_resolution']['enabled'] = enable_sr
     pipeline.config['super_resolution']['method'] = sr_method
     pipeline.config['detection']['enabled'] = enable_det
     pipeline.config['crowd_counting']['enabled'] = enable_crowd
+    pipeline.config['runtime']['confidence_threshold'] = conf_thresh
 
     video_pipeline.config['enhancement']['enabled'] = enable_enh
     video_pipeline.config['super_resolution']['enabled'] = enable_sr
     video_pipeline.config['super_resolution']['method'] = sr_method
     video_pipeline.config['tracking']['enabled'] = enable_det
     video_pipeline.config['crowd_counting']['enabled'] = enable_crowd
+    video_pipeline.config['runtime']['confidence_threshold'] = conf_thresh
 
     input_type = st.radio("Select Input Type", ["Image", "Video"])
 

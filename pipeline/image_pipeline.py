@@ -82,6 +82,8 @@ class ImagePipeline:
 
         # Detection (only runs if enabled)
         if self.config.get('detection', {}).get('enabled', False) and self.detector:
+            # Sync runtime confidence threshold dynamically
+            self.detector.conf_thresh = self.config.get('runtime', {}).get('confidence_threshold', 0.20)
             det_results = self.detector.detect(processed_image)
             results['detected'] = det_results.plot()
 
