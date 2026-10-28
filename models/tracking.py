@@ -9,5 +9,10 @@ class PersonTracker:
         self.tracker_yaml = f"{self.method}.yaml"
 
     def track_frame(self, image, persist=True):
-        results = self.model.track(image, persist=persist, conf=self.conf_thresh, classes=[0], tracker=self.tracker_yaml, verbose=False)
-        return results[0]
+        try:
+            results = self.model.track(image, persist=persist, conf=self.conf_thresh, classes=[0], tracker=self.tracker_yaml, verbose=False)
+            return results[0]
+        except Exception:
+            # Fallback to standard person detection if linear assignment fails
+            results = self.model.predict(image, conf=self.conf_thresh, classes=[0], verbose=False)
+            return results[0]

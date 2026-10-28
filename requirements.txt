@@ -9,3 +9,5 @@ pyyaml
 torch
 torchvision
 Pillow
+lapx>=0.5.2
+scipy
