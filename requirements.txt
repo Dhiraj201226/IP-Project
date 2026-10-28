@@ -1,0 +1,11 @@
+ultralytics
+opencv-python==4.10.0.84
+opencv-contrib-python==4.10.0.84
+numpy
+pandas
+matplotlib
+streamlit
+pyyaml
+torch
+torchvision
+Pillow

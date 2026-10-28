@@ -1,0 +1,14 @@
+{
+    "total_images": 0,
+    "total_videos": 0,
+    "total_annotations": 0,
+    "image_dimensions": "Unknown",
+    "available_labels": [],
+    "available_splits": [
+        "test"
+    ],
+    "supported_evaluation_tasks": [
+        "Qualitative Enhancement",
+        "Qualitative Detection"
+    ]
+}

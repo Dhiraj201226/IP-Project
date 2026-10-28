@@ -1,0 +1,23 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Temporary uploads and outputs
+data/test/images/temp_upload*
+data/test/videos/temp_upload*
+data/test/videos/output_video*
+
+# Streamlit & IDE
+.streamlit/secrets.toml
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,35 @@
+dataset_path: "data/test"
+output_path: "outputs"
+
+enhancement:
+  enabled: true
+  method: "clahe" # 'zerodce' or 'clahe'
+
+super_resolution:
+  enabled: true
+  model_path: "models/weights/EDSR_x4.pb" # Downloaded by script
+  model_name: "edsr"
+  scale: 4
+
+detection:
+  enabled: true
+  model: "yolov8n.pt"
+
+crowd_counting:
+  enabled: true
+  method: "detection_fallback"
+  density_thresholds:
+    low: 5
+    medium: 15
+    high: 30
+
+tracking:
+  enabled: true
+  method: "bytetrack" # Ultralytics supports botsort and bytetrack
+
+evaluation:
+  test_split: "test"
+
+runtime:
+  device: "auto"
+  confidence_threshold: 0.50
